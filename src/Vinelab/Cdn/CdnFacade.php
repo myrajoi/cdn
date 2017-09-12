@@ -142,8 +142,9 @@ class CdnFacade implements CdnFacadeInterface
             //Request::root() doesn't return https if the request is secure
             $url = Request::root().'/'.$path;
             $url = Request::secure() ? str_replace('http://', 'https://', $url) : $url;
+            $https = $this->server->get('HTTPS');
 
-            return Request::secure() ? 'true' : 'false';
+            return !empty($https) && 'off' !== strtolower($https) ? 'true' : 'false';
         }
 
         if (!isset($path)) {
