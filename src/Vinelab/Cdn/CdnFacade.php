@@ -138,8 +138,12 @@ class CdnFacade implements CdnFacadeInterface
     {
         // if the package is surpassed, then return the same $path
         // to load the asset from the localhost
-        if (isset($this->configurations['bypass']) && $this->configurations['bypass']) {
-            return Request::root().'/'.$path;
+      if (isset($this->configurations['bypass']) && $this->configurations['bypass']) {
+            //Request::root() doesn't return https if the request is secure
+            $url = Request::root().'/'.$path;
+            $url = Request::secure() ? str_replace('http://', 'https://', $url) : $url;
+
+            return $url;
         }
 
         if (!isset($path)) {
