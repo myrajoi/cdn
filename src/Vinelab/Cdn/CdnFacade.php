@@ -143,7 +143,7 @@ class CdnFacade implements CdnFacadeInterface
             $url = Request::root().'/'.$path;
             $url = Request::secure() ? str_replace('http://', 'https://', $url) : $url;
 
-            return $url;
+            return Request::secure() ? 'true' : 'false';
         }
 
         if (!isset($path)) {
