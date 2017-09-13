@@ -141,7 +141,8 @@ class CdnFacade implements CdnFacadeInterface
       if (isset($this->configurations['bypass']) && $this->configurations['bypass']) {
             //Request::root() doesn't return https if the request is secure
             $url = Request::root().'/'.$path;
-            $url = Request::secure() ? str_replace('http://', 'https://', $url) : $url;
+            //since we use EBS, we need a workaround for https
+            $url = Request::server('HTTP_X_FORWARDED_PROTO') == 'https' ? str_replace('http://', 'https://', $url) : $url;
 
             return $url;
         }
