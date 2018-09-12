@@ -10,4 +10,5 @@ namespace Vinelab\Cdn\Contracts;
 interface CdnFacadeInterface
 {
     public function asset($path);
+    public function mix($path);
 }
