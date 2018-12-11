@@ -106,6 +106,34 @@ class CdnFacade implements CdnFacadeInterface
 
     /**
      * this function will be called from the 'views' using the
+     * 'Cdn' facade {{Cdn::mix('')}} to convert the Laravel 5.4 webpack mix
+     * generated file path into it's CDN url.
+     *
+     * @param $path
+     *
+     * @return mixed
+     *
+     * @throws Exceptions\EmptyPathException, \InvalidArgumentException
+     */
+    public function mix($path, $buildDir = 'build')
+    {
+        static $manifest = null;
+        if (is_null($manifest)) {
+            $manifest = json_decode(file_get_contents(public_path("$buildDir/mix-manifest.json")), true);
+        }
+        if (isset($manifest[$path])) {
+            if (isset($buildDir) && strlen($buildDir) > 0) {
+                return $this->generateUrl($buildDir . '/' . $manifest[$path], 'public/');
+            } else {
+                return $this->generateUrl($manifest[$path], 'public/');
+            }
+        }
+        throw new \InvalidArgumentException("File {$path} not defined in asset manifest.");
+    }
+
+
+    /**
+     * this function will be called from the 'views' using the
      * 'Cdn' facade {{Cdn::path('')}} to convert the path into
      * it's CDN url.
      *
