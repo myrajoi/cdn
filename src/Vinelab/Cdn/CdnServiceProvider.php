@@ -116,10 +116,9 @@ class CdnServiceProvider extends ServiceProvider
         //-----------------
 
         // Register 'CdnFacade' instance container to our CdnFacade object
-        $this->app['cdn'] = $this->app->share(function () {
-            return $this->app->make('Vinelab\Cdn\CdnFacade');
+        $this->app->singleton('cdn', function ($app) {
+            return $app->make('Vinelab\Cdn\CdnFacade');
         });
-
         // Shortcut so developers don't need to add an Alias in app/config/app.php
         $this->app->booting(function () {
             $loader = \Illuminate\Foundation\AliasLoader::getInstance();
